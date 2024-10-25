@@ -1,5 +1,5 @@
 plugins {
-    id "java"
+    id "java-library"
     id "maven-publish"
     id "edu.wpi.first.GradleRIO" version "2024.3.2"
     id "edu.wpi.first.WpilibTools" version "1.3.0"
@@ -10,7 +10,8 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-group = 'org.github.NoamRosenberg08'
+group = 'com.github.NoamRosenberg08'
+version 'a2024.0.1'
 
 dependencies {
     implementation wpi.java.deps.wpilib()
@@ -62,4 +63,10 @@ publishing {
             }
         }
     }
+}
+
+
+repositories {
+    mavenCentral()
+    maven { url "https://jitpack.io" }
 }
