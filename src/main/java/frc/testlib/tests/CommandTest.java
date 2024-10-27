@@ -32,7 +32,7 @@ public class CommandTest<T> implements ITest {
 
     public void scheduleCommand(){
         command.schedule();
-        shouldInterrupt(interruptedSignalSupplier);
+        handleInterruption();
     }
     public static double getActiveTime(double startingTimeSeconds){
         return System.currentTimeMillis() / 1e3 - startingTimeSeconds;
@@ -43,20 +43,26 @@ public class CommandTest<T> implements ITest {
         double startTime = System.currentTimeMillis() / 1e3;
 
         while (command.isScheduled() || checkCommand.isScheduled()){
-            shouldInterrupt(interruptedSignalSupplier);
+            handleInterruption();
             if(getActiveTime(startTime) > timeoutInSeconds){
                 break;
             }
         }
     }
 
-    private boolean shouldInterrupt(BooleanSupplier interruptedSignalSupplier){
-        if (interruptedSignalSupplier.getAsBoolean()){
-            command.end(true);
-            failTest();
-            return true;
+    private boolean shouldInterrupt(){
+        return interruptedSignalSupplier.getAsBoolean();
+    }
+
+    private void interrupt(){
+        command.end(true);
+        failTest();
+    }
+
+    private void handleInterruption(){
+        if (shouldInterrupt()){
+            interrupt();
         }
-        return false;
     }
 
     private void failTest(){
