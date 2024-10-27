@@ -21,10 +21,12 @@ public class TestsManager {
     }
 
     private static void runTests(){
-
         interruptSignal = false;
         boolean testResult;
         for (ITest test : registeredTests){
+            if(interruptSignal){
+                return;
+            }
             testResult = test.test(() -> interruptSignal);
             System.out.println(test.getName() + ": " + (testResult ? "\u001B[32m"+ "passed" : "\u001B[31m" +"failed") + "\u001B[0m");;
         }

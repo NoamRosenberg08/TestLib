@@ -41,6 +41,10 @@ public class CommandTest<T> implements ITest {
 
         double startTime = System.currentTimeMillis() / 1e3;
 
+        if(interruptedSignalSupplier.getAsBoolean()){
+            return;
+        }
+
         while (command.isScheduled() || checkCommand.isScheduled()){
             if(interruptedSignalSupplier.getAsBoolean()){
                 command.end(true);
