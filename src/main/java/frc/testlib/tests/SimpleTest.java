@@ -1,5 +1,6 @@
 package frc.testlib.tests;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -19,7 +20,7 @@ public class SimpleTest<T> implements ITest{
         return outputCheck.test(output);
     }
 
-    public boolean test(){
+    public boolean test(BooleanSupplier interruptedSignalSupplier){
         return test(outputSupplier.get());
     }
 

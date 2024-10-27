@@ -4,6 +4,7 @@ package frc.testlib.tests;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -13,6 +14,7 @@ public class CommandTest<T> implements ITest {
 
     private final Command checkCommand;
     private final Command command;
+    private BooleanSupplier interruptedSignalSupplier;
     private final double timeoutInSeconds;
     private final String name;
     private boolean hasPassed;
@@ -23,6 +25,7 @@ public class CommandTest<T> implements ITest {
         this.checkCommand = new InstantCommand(() -> hasPassed = outputCheck.test(outputSupplier.get()));
         this.command = command.withTimeout(this.timeoutInSeconds).andThen(checkCommand);
 
+        this.interruptedSignalSupplier = () -> false;
 
         this.name = name;
     }
@@ -34,11 +37,14 @@ public class CommandTest<T> implements ITest {
         return System.currentTimeMillis() / 1e3 - startingTimeSeconds;
     }
 
-    private void waitForCommandToFinish(){
+    private void waitForCommandToFinish(BooleanSupplier interruptedSignalSupplier){
 
         double startTime = System.currentTimeMillis() / 1e3;
 
         while (command.isScheduled() || checkCommand.isScheduled()){
+            if(interruptedSignalSupplier.getAsBoolean()){
+                command.end(true);
+            }
             if(getActiveTime(startTime) > timeoutInSeconds){
                 break;
             }
@@ -46,10 +52,10 @@ public class CommandTest<T> implements ITest {
     }
 
     @Override
-    public boolean test() {
+    public boolean test(BooleanSupplier interruptedSignalSupplier) {
         scheduleCommand();
 
-        waitForCommandToFinish();
+        waitForCommandToFinish(interruptedSignalSupplier);
 
         return hasPassed;
     }
