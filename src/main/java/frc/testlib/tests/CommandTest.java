@@ -31,19 +31,19 @@ public class CommandTest<T> implements ITest {
     }
 
     public void scheduleCommand(){
+        if(interruptedSignalSupplier.getAsBoolean()){
+            return;
+        }
+
         command.schedule();
     }
     public static double getActiveTime(double startingTimeSeconds){
         return System.currentTimeMillis() / 1e3 - startingTimeSeconds;
     }
 
-    private void waitForCommandToFinish(BooleanSupplier interruptedSignalSupplier){
+    private void waitForCommandToFinish(){
 
         double startTime = System.currentTimeMillis() / 1e3;
-
-        if(interruptedSignalSupplier.getAsBoolean()){
-            return;
-        }
 
         while (command.isScheduled() || checkCommand.isScheduled()){
             if(interruptedSignalSupplier.getAsBoolean()){
@@ -57,9 +57,10 @@ public class CommandTest<T> implements ITest {
 
     @Override
     public boolean test(BooleanSupplier interruptedSignalSupplier) {
+        this.interruptedSignalSupplier = interruptedSignalSupplier;
         scheduleCommand();
 
-        waitForCommandToFinish(interruptedSignalSupplier);
+        waitForCommandToFinish();
 
         return hasPassed;
     }
