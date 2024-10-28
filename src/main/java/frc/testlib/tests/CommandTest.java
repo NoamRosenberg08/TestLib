@@ -15,16 +15,16 @@ public class CommandTest<T> implements ITest {
     private final Command command;
     private final double timeoutInSeconds;
     private final String name;
+    private final String path;
     private boolean hasPassed;
-    public CommandTest(String name, Command command, Predicate<T> outputCheck, Supplier<T> outputSupplier, double timeoutInSeconds) {
+    public CommandTest(String name, String path, Command command, Predicate<T> outputCheck, Supplier<T> outputSupplier, double timeoutInSeconds) {
+        this.name = name;
+        this.path = path;
 
         this.timeoutInSeconds = timeoutInSeconds - commandEndDelayTimeSeconds;
 
         this.checkCommand = new InstantCommand(() -> hasPassed = outputCheck.test(outputSupplier.get()));
         this.command = command.withTimeout(this.timeoutInSeconds).andThen(checkCommand);
-
-
-        this.name = name;
     }
 
     public void scheduleCommand(){
@@ -57,5 +57,10 @@ public class CommandTest<T> implements ITest {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String getPath() {
+        return path;
     }
 }
