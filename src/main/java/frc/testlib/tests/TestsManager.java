@@ -21,9 +21,6 @@ public class TestsManager {
     }
 
     private static void runTests(){
-
-        testThread.stop();
-
         interruptSignal = false;
         boolean testResult;
         for (ITest test : registeredTests){
