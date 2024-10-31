@@ -22,7 +22,10 @@ public class CommandTest<T> implements ITest {
 
         this.timeoutInSeconds = timeoutInSeconds - commandEndDelayTimeSeconds;
 
-        this.checkCommand = new InstantCommand(() -> hasPassed = outputCheck.test(outputSupplier.get()));
+        this.checkCommand = new InstantCommand(() -> {
+            hasPassed = outputCheck.test(outputSupplier.get());
+            System.out.println(hasPassed + "     aaaa");
+        });
         this.command = command.withTimeout(this.timeoutInSeconds).andThen(checkCommand);
 
         this.interruptedSignalSupplier = () -> false;
@@ -75,6 +78,8 @@ public class CommandTest<T> implements ITest {
         scheduleCommand();
 
         waitForCommandToFinish();
+
+        System.out.println(hasPassed);
 
         return hasPassed;
     }
