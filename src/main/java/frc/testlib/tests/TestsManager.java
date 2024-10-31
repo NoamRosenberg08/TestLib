@@ -37,7 +37,7 @@ public class TestsManager {
         testThread.start();
     }
 
-    public void interrupt(){
+    public static void interrupt(){
         interruptSignal = true;
     }
 
