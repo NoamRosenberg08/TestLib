@@ -8,11 +8,13 @@ public class SimpleTest<T> implements ITest{
     private final Predicate<T> outputCheck;
     private final Supplier<T> outputSupplier;
     private final String name;
+    private final String[] tags;
 
-    public SimpleTest(String name, Predicate<T> outputCheck, Supplier<T> outputSupplier) {
+    public SimpleTest(String name, Predicate<T> outputCheck, Supplier<T> outputSupplier, String... tags) {
         this.outputCheck = outputCheck;
         this.outputSupplier = outputSupplier;
         this.name = name;
+        this.tags = tags;
     }
 
     public boolean test(T output){
@@ -26,5 +28,10 @@ public class SimpleTest<T> implements ITest{
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String[] getTags() {
+        return tags;
     }
 }

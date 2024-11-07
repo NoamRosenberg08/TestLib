@@ -20,8 +20,9 @@ public class CommandTest<T> implements ITest {
     private final Supplier<T> outputSupplier;
     private final Deque<T> outputFrame;
     private final String name;
+    private final String[] tags;
 
-    public CommandTest(String name, Command command, Predicate<T> outputCheck, Supplier<T> outputSupplier, int outputFrameSize, double timeoutInSeconds) {
+    public CommandTest(String name, Command command, Predicate<T> outputCheck, Supplier<T> outputSupplier, int outputFrameSize, double timeoutInSeconds, String... tags) {
 
         this.name = name;
         this.command = command.withTimeout(timeoutInSeconds);
@@ -33,16 +34,19 @@ public class CommandTest<T> implements ITest {
         fillOutputFrame(outputFrameSize);
 
         this.timeoutInSeconds = timeoutInSeconds;
+
+        this.tags = tags;
     }
 
-    public CommandTest(String name, Command command, Predicate<T> outputCheck, Supplier<T> outputSupplier, double timeoutInSeconds) {
+    public CommandTest(String name, Command command, Predicate<T> outputCheck, Supplier<T> outputSupplier, double timeoutInSeconds, String... tags) {
         this(
                 name,
                 command,
                 outputCheck,
                 outputSupplier,
                 DEFAULT_OUTPUT_FRAME_SIZE,
-                timeoutInSeconds
+                timeoutInSeconds,
+                tags
         );
     }
 
@@ -101,5 +105,10 @@ public class CommandTest<T> implements ITest {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String[] getTags() {
+        return tags;
     }
 }
