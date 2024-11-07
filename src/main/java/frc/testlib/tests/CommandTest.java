@@ -12,6 +12,8 @@ import java.util.function.Supplier;
 
 public class CommandTest<T> implements ITest {
 
+    private static final int DEFAULT_OUTPUT_FRAME_SIZE = 5;
+
     private final Command command;
     private final double timeoutInSeconds;
     private final Predicate<T> outputCheck;
@@ -31,6 +33,17 @@ public class CommandTest<T> implements ITest {
         fillOutputFrame(outputFrameSize);
 
         this.timeoutInSeconds = timeoutInSeconds;
+    }
+
+    public CommandTest(String name, Command command, Predicate<T> outputCheck, Supplier<T> outputSupplier, double timeoutInSeconds) {
+        this(
+                name,
+                command,
+                outputCheck,
+                outputSupplier,
+                DEFAULT_OUTPUT_FRAME_SIZE,
+                timeoutInSeconds
+        );
     }
 
     public static double getActiveTime(double startingTimeSeconds) {
