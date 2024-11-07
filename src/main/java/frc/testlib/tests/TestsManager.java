@@ -2,10 +2,12 @@ package frc.testlib.tests;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class TestsManager {
 
     private static final List<ITest> registeredTests = new ArrayList<>();
+    private static Supplier<Tags> tagsSupplier = () -> null;
     private static final Thread testThread = new Thread(TestsManager::runTests);
 
 
@@ -19,22 +21,30 @@ public class TestsManager {
         }
     }
 
-    private static List<ITest> getTestsByTags(String[] wantedTags){
+    private static List<ITest> getTestsByTags(Tags wantedTags){
 
         List<ITest> taggedTests = new ArrayList<>();
         String[] tags;
 
         for (ITest test : registeredTests){
-            tags = test.getTags();
-
-
+            if(test.getTags().containsTags(wantedTags)){
+                taggedTests.add(test);
+            }
         }
 
-        return null;
+        return taggedTests;
     }
 
-    private static void runTests(String... tags){
-        for (ITest test : registeredTests){
+    private static void runTests(){
+
+        List<ITest> tests;
+        if(tagsSupplier.get() == null){
+            tests = registeredTests;
+        }else{
+            tests = getTestsByTags(tagsSupplier.get());
+        }
+
+        for (ITest test : tests){
             System.out.println(test.getName() + ": " + (test.test() ? "\u001B[32m"+ "passed" : "\u001B[31m" +"failed") + "\u001B[0m");;
         }
     }
@@ -42,6 +52,10 @@ public class TestsManager {
     public static void runTestsOnThread(){
         System.out.println("starting tests thread...");
         testThread.start();
+    }
+
+    public static void setTags(Tags tags){
+        tagsSupplier = () -> tags;
     }
 
 }
