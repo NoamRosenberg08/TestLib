@@ -47,28 +47,32 @@ public class CommandTest<T> implements ITest {
         command.schedule();
     }
 
+    private void updateFrame(){
+        outputFrame.remove();
+        outputFrame.add(outputSupplier.get());
+    }
+
     private void waitForCommandToFinish() {
 
         double startTime = System.currentTimeMillis() / 1e3;
 
         while (command.isScheduled()) {
 
-            outputFrame.remove();
-            outputFrame.add(outputSupplier.get());
-
             if (getActiveTime(startTime) > timeoutInSeconds) {
                 break;
             }
+            updateFrame();
         }
     }
 
     private boolean hasFramePassedTest(){
-        for (T output : outputFrame){
-            System.out.println(output);
-            if(outputCheck.test(output)){
+
+        for (T output : outputFrame) {
+            if (outputCheck.test(output)) {
                 return true;
             }
         }
+
         return false;
     }
 
