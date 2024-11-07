@@ -56,8 +56,6 @@ public class CommandTest<T> implements ITest {
             outputFrame.remove();
             outputFrame.add(outputSupplier.get());
 
-            System.out.println(outputFrame.toString());
-
             if (getActiveTime(startTime) > timeoutInSeconds) {
                 break;
             }
