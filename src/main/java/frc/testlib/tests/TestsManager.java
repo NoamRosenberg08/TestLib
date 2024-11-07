@@ -19,7 +19,21 @@ public class TestsManager {
         }
     }
 
-    private static void runTests(){
+    private static List<ITest> getTestsByTags(String[] wantedTags){
+
+        List<ITest> taggedTests = new ArrayList<>();
+        String[] tags;
+
+        for (ITest test : registeredTests){
+            tags = test.getTags();
+
+
+        }
+
+        return null;
+    }
+
+    private static void runTests(String... tags){
         for (ITest test : registeredTests){
             System.out.println(test.getName() + ": " + (test.test() ? "\u001B[32m"+ "passed" : "\u001B[31m" +"failed") + "\u001B[0m");;
         }
