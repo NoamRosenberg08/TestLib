@@ -4,6 +4,6 @@ public interface ITest {
 
     boolean test();
     String getName();
-    String[] getTags();
+    Tags getTags();
 
 }
