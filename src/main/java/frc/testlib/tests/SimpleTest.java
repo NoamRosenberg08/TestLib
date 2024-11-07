@@ -8,9 +8,9 @@ public class SimpleTest<T> implements ITest{
     private final Predicate<T> outputCheck;
     private final Supplier<T> outputSupplier;
     private final String name;
-    private final String[] tags;
+    private final Tags tags;
 
-    public SimpleTest(String name, Predicate<T> outputCheck, Supplier<T> outputSupplier, String... tags) {
+    public SimpleTest(String name, Tags tags, Predicate<T> outputCheck, Supplier<T> outputSupplier) {
         this.outputCheck = outputCheck;
         this.outputSupplier = outputSupplier;
         this.name = name;
@@ -31,7 +31,7 @@ public class SimpleTest<T> implements ITest{
     }
 
     @Override
-    public String[] getTags() {
+    public Tags getTags() {
         return tags;
     }
 }
