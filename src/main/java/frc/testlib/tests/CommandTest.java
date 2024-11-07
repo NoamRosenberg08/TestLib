@@ -4,45 +4,74 @@ package frc.testlib.tests;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+
 public class CommandTest<T> implements ITest {
 
-    private static final double commandEndDelayTimeSeconds = 5 / 1e3;
-
-    private final Command checkCommand;
     private final Command command;
     private final double timeoutInSeconds;
+    private final Predicate<T> outputCheck;
+    private final Supplier<T> outputSupplier;
+    private final Deque<T> outputFrame;
     private final String name;
-    private boolean hasPassed;
-    public CommandTest(String name, Command command, Predicate<T> outputCheck, Supplier<T> outputSupplier, double timeoutInSeconds) {
 
-        this.timeoutInSeconds = timeoutInSeconds - commandEndDelayTimeSeconds;
-
-        this.checkCommand = new InstantCommand(() -> hasPassed = outputCheck.test(outputSupplier.get()));
-        this.command = command.withTimeout(this.timeoutInSeconds).andThen(checkCommand);
-
+    public CommandTest(String name, Command command, Predicate<T> outputCheck, Supplier<T> outputSupplier, int outputFrameSize, double timeoutInSeconds) {
 
         this.name = name;
+        this.command = command.withTimeout(timeoutInSeconds);
+
+        this.outputCheck = outputCheck;
+        this.outputSupplier = outputSupplier;
+
+        this.outputFrame = new LinkedList<>();
+        fillOutputFrame(outputFrameSize);
+
+        this.timeoutInSeconds = timeoutInSeconds;
     }
 
-    public void scheduleCommand(){
-        command.schedule();
-    }
-    public static double getActiveTime(double startingTimeSeconds){
+    public static double getActiveTime(double startingTimeSeconds) {
         return System.currentTimeMillis() / 1e3 - startingTimeSeconds;
     }
 
-    private void waitForCommandToFinish(){
+    private void fillOutputFrame(int outputFrameSize) {
+        for (int i = 0; i < outputFrameSize; i++) {
+            outputFrame.add(outputSupplier.get());
+        }
+    }
+
+    public void scheduleCommand() {
+        command.schedule();
+    }
+
+    private void waitForCommandToFinish() {
 
         double startTime = System.currentTimeMillis() / 1e3;
 
-        while (command.isScheduled() || checkCommand.isScheduled()){
-            if(getActiveTime(startTime) > timeoutInSeconds){
+        while (command.isScheduled()) {
+
+            outputFrame.remove();
+            outputFrame.add(outputSupplier.get());
+
+            System.out.println(outputFrame.toString());
+
+            if (getActiveTime(startTime) > timeoutInSeconds) {
                 break;
             }
         }
+    }
+
+    private boolean hasFramePassedTest(){
+        for (T output : outputFrame){
+            System.out.println(output);
+            if(outputCheck.test(output)){
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -51,7 +80,7 @@ public class CommandTest<T> implements ITest {
 
         waitForCommandToFinish();
 
-        return hasPassed;
+        return hasFramePassedTest();
     }
 
     @Override
