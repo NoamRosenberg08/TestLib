@@ -27,4 +27,13 @@ public class SimpleTest<T> implements ITest{
     public String getName() {
         return name;
     }
+
+    @Override
+    public String toString() {
+        return "SimpleTest{" +
+                "outputCheck=" + outputCheck +
+                ", outputSupplier=" + outputSupplier +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

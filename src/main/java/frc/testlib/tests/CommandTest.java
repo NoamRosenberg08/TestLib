@@ -102,4 +102,16 @@ public class CommandTest<T> implements ITest {
     public String getName() {
         return name;
     }
+
+    @Override
+    public String toString() {
+        return "CommandTest{" +
+                "command=" + command +
+                ", timeoutInSeconds=" + timeoutInSeconds +
+                ", outputCheck=" + outputCheck +
+                ", outputSupplier=" + outputSupplier +
+                ", outputFrame=" + outputFrame +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
