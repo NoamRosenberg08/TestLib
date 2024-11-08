@@ -31,8 +31,8 @@ public class SimpleTest<T> implements ITest{
     @Override
     public String toString() {
         return "SimpleTest{" +
-                "outputCheck=" + outputCheck +
-                ", outputSupplier=" + outputSupplier +
+                "outputCheck=" + outputCheck.toString() +
+                ", outputSupplier=" + outputSupplier.toString() +
                 ", name='" + name + '\'' +
                 '}';
     }
