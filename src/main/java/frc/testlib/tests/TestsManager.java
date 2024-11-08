@@ -40,7 +40,6 @@ public class TestsManager {
 
         List<ITest> tests = getTests(tagsSupplier.get());
 
-
         for (ITest test : tests){
             System.out.println(test.getName() + ": " + (test.test() ? "\u001B[32m"+ "passed" : "\u001B[31m" +"failed") + "\u001B[0m");;
         }
