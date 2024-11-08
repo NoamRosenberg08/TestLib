@@ -111,4 +111,15 @@ public class CommandTest<T> implements ITest {
     public Tags getTags() {
         return tags;
     }
+
+    public String toString() {
+        return "CommandTest{" +
+                "command=" + command.getName() +
+                ", timeoutInSeconds=" + timeoutInSeconds +
+                ", outputCheck=" + outputCheck.toString() +
+                ", outputSupplier=" + outputSupplier.toString() +
+                ", outputFrame=" + outputFrame.toString() +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

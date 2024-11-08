@@ -34,4 +34,11 @@ public class SimpleTest<T> implements ITest{
     public Tags getTags() {
         return tags;
     }
+    public String toString() {
+        return "SimpleTest{" +
+                "outputCheck=" + outputCheck.toString() +
+                ", outputSupplier=" + outputSupplier.toString() +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
