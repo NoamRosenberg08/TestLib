@@ -38,16 +38,19 @@ public class TestsManager {
 
     private static void runTests(){
 
-        List<ITest> tests;
-        if(tagsSupplier.get() == null){
-            tests = registeredTests;
-        }else{
-            tests = getTestsByTags(tagsSupplier.get());
-        }
+        List<ITest> tests = getTests(tagsSupplier.get());
+
 
         for (ITest test : tests){
             System.out.println(test.getName() + ": " + (test.test() ? "\u001B[32m"+ "passed" : "\u001B[31m" +"failed") + "\u001B[0m");;
         }
+    }
+
+    private static List<ITest> getTests(Tags tags){
+        if(tags == null){
+            return registeredTests;
+        }
+        return getTestsByTags(tagsSupplier.get());
     }
 
     public static void runTestsOnThread(){
