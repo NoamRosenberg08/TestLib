@@ -8,11 +8,13 @@ public class SimpleTest<T> implements ITest{
     private final Predicate<T> outputCheck;
     private final Supplier<T> outputSupplier;
     private final String name;
+    private final Tags tags;
 
-    public SimpleTest(String name, Predicate<T> outputCheck, Supplier<T> outputSupplier) {
+    public SimpleTest(String name, Tags tags, Predicate<T> outputCheck, Supplier<T> outputSupplier) {
         this.outputCheck = outputCheck;
         this.outputSupplier = outputSupplier;
         this.name = name;
+        this.tags = tags;
     }
 
     public boolean test(T output){
@@ -29,11 +31,12 @@ public class SimpleTest<T> implements ITest{
     }
 
     @Override
+    public Tags getTags() {
+        return tags;
+    }
     public String toString() {
         return "SimpleTest{" +
-                "outputCheck=" + outputCheck.toString() +
-                ", outputSupplier=" + outputSupplier.toString() +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 '}';
     }
 }

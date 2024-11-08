@@ -1,11 +1,14 @@
 package frc.testlib.tests;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class TestsManager {
 
     private static final List<ITest> registeredTests = new ArrayList<>();
+    private static Supplier<Tags> tagsSupplier = () -> null;
     private static final Thread testThread = new Thread(TestsManager::runTests);
 
 
@@ -19,15 +22,43 @@ public class TestsManager {
         }
     }
 
-    private static void runTests(){
+    public static List<ITest> getTestsByTags(Tags wantedTags){
+
+        List<ITest> taggedTests = new ArrayList<>();
+        String[] tags;
+
         for (ITest test : registeredTests){
+            if(test.getTags().containsTags(wantedTags)){
+                taggedTests.add(test);
+            }
+        }
+
+        return taggedTests;
+    }
+
+    private static void runTests(){
+
+        List<ITest> tests = getTests(tagsSupplier.get());
+
+        for (ITest test : tests){
             System.out.println(test.getName() + ": " + (test.test() ? "\u001B[32m"+ "passed" : "\u001B[31m" +"failed") + "\u001B[0m");;
         }
+    }
+
+    private static List<ITest> getTests(Tags tags){
+        if(tags == null){
+            return registeredTests;
+        }
+        return getTestsByTags(tagsSupplier.get());
     }
 
     public static void runTestsOnThread(){
         System.out.println("starting tests thread...");
         testThread.start();
+    }
+
+    public static void setTags(Tags tags){
+        tagsSupplier = () -> tags;
     }
 
 }
