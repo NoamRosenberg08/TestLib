@@ -1,6 +1,7 @@
 package frc.testlib.tests;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -21,7 +22,7 @@ public class TestsManager {
         }
     }
 
-    private static List<ITest> getTestsByTags(Tags wantedTags){
+    public static List<ITest> getTestsByTags(Tags wantedTags){
 
         List<ITest> taggedTests = new ArrayList<>();
         String[] tags;
