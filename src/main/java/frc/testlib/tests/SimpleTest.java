@@ -36,9 +36,7 @@ public class SimpleTest<T> implements ITest{
     }
     public String toString() {
         return "SimpleTest{" +
-                "outputCheck=" + outputCheck.toString() +
-                ", outputSupplier=" + outputSupplier.toString() +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 '}';
     }
 }
