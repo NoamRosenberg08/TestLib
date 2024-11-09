@@ -1,0 +1,16 @@
+name: "test"
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'actions'
+    pull_requests:
+      - 'main'
+
+jobs:
+  testing:
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: echo "hello"
