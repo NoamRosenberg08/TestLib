@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - 'actions'
-      - 'main'
-    pull_requests:
-      - 'main'
 
 jobs:
   testing:
