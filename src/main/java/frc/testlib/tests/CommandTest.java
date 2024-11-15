@@ -102,6 +102,14 @@ public class CommandTest<T> implements ITest {
         return false;
     }
 
+    public double getEndTime(){
+        return endTime;
+    }
+
+    public double getExpectedTime() {
+        return expectedTime;
+    }
+
     public boolean isAtExpectedTime(){
         return endTime <= expectedTime;
     }

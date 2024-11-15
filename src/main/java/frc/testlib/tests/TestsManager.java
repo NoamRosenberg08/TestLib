@@ -40,7 +40,15 @@ public class TestsManager {
         List<ITest> tests = getTests(tagsSupplier.get());
 
         for (ITest test : tests){
-            System.out.println(test.getName() + ": " + (test.test() ? "\u001B[32m"+ "passed" : "\u001B[31m" +"failed") + "\u001B[0m");;
+            if(test instanceof CommandTest<?>){
+                System.out.println(
+                        test.getName() + ": " + (test.test() ? "\u001B[32m"+ "passed" : "\u001B[31m" +"failed") + "\u001B[0m"
+                        + " expected time: " + ((CommandTest<?>) test).getExpectedTime() + " actual end time: " + ((CommandTest<?>) test).getEndTime()
+                );
+            }else{
+                System.out.println(test.getName() + ": " + (test.test() ? "\u001B[32m"+ "passed" : "\u001B[31m" +"failed") + "\u001B[0m");
+            }
+
         }
     }
 
