@@ -19,10 +19,12 @@ public class CommandTest<T> implements ITest {
     private final Predicate<T> outputCheck;
     private final Supplier<T> outputSupplier;
     private final Deque<T> outputFrame;
+    private final double expectedTime;
+    private double endTime;
     private final String name;
     private final Tags tags;
 
-    public CommandTest(String name, Tags tags, Command command, Predicate<T> outputCheck, Supplier<T> outputSupplier, int outputFrameSize, double timeoutInSeconds) {
+    public CommandTest(String name, Tags tags, Command command, Predicate<T> outputCheck, Supplier<T> outputSupplier, int outputFrameSize,double expectedTime, double timeoutInSeconds) {
 
         this.name = name;
         this.command = command.withTimeout(timeoutInSeconds);
@@ -33,12 +35,13 @@ public class CommandTest<T> implements ITest {
         this.outputFrame = new LinkedList<>();
         fillOutputFrame(outputFrameSize);
 
+        this.expectedTime = expectedTime;
         this.timeoutInSeconds = timeoutInSeconds;
 
         this.tags = tags;
     }
 
-    public CommandTest(String name, Tags tags, Command command, Predicate<T> outputCheck, Supplier<T> outputSupplier, double timeoutInSeconds) {
+    public CommandTest(String name, Tags tags, Command command, Predicate<T> outputCheck, Supplier<T> outputSupplier,double expectedTime, double timeoutInSeconds) {
         this(
                 name,
                 tags,
@@ -46,6 +49,7 @@ public class CommandTest<T> implements ITest {
                 outputCheck,
                 outputSupplier,
                 DEFAULT_OUTPUT_FRAME_SIZE,
+                expectedTime,
                 timeoutInSeconds
         );
     }
@@ -69,6 +73,10 @@ public class CommandTest<T> implements ITest {
         outputFrame.add(outputSupplier.get());
     }
 
+    private void updateEndTime (double startingTime){
+        endTime = getActiveTime(startingTime);
+    }
+
     private void waitForCommandToFinish() {
 
         double startTime = System.currentTimeMillis() / 1e3;
@@ -79,6 +87,7 @@ public class CommandTest<T> implements ITest {
                 break;
             }
             updateFrame();
+            updateEndTime(startTime);
         }
     }
 
@@ -93,6 +102,9 @@ public class CommandTest<T> implements ITest {
         return false;
     }
 
+    public boolean isAtExpectedTime(){
+        return endTime <= expectedTime;
+    }
     @Override
     public boolean test() {
         scheduleCommand();
