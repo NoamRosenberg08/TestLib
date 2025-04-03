@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class Main {
     public static void main(String[] args) {
 
-        SimpleTest t = new SimpleTest<>(
+        InstantTest t = new InstantTest<>(
                 "aaa",
                 new Tags("a","b", "c"),
                 (a) -> false,
@@ -13,14 +13,14 @@ public class Main {
         );
 
 
-        SimpleTest t1 = new SimpleTest<>(
+        InstantTest t1 = new InstantTest<>(
                 "bbb",
                 new Tags("b", "c"),
                 (a) -> false,
                 () -> 1
         );
 
-        SimpleTest t2 = new SimpleTest<>(
+        InstantTest t2 = new InstantTest<>(
                 "ccc",
                 new Tags("z"),
                 (a) -> false,
